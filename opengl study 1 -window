@@ -1,0 +1,62 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+#include <iostream>
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
+
+int main() {
+	glfwInit();//初始化
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
+
+	GLFWwindow* window = glfwCreateWindow(800, 600, "learn opengl", NULL, NULL);//生成窗口
+	if (window == NULL) {
+		std::cout << "failed to output the window" << std::endl;
+		glfwTerminate();
+		return -1;
+	}
+
+	glfwMakeContextCurrent(window);//设置为线程窗口
+
+
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) )//glad获取OpenGL函数地址
+	{
+
+		std::cout << "failed to get opengl address" << std::endl;
+		return -1;
+	}
+
+	glViewport(0, 0, 800, 600);//视口
+
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);//窗口调整函数注册
+
+	while (!glfwWindowShouldClose(window))//当窗口不关闭时，一直执行
+	{
+		processInput(window);//输入
+
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//窗口渲染颜色render
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+	glfwTerminate();
+
+	return 0;
+
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
